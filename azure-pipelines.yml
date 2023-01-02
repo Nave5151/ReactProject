@@ -1,0 +1,28 @@
+# Node.js with React
+# Build a Node.js project that uses React.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  - template: vars.yml
+
+stages:
+- stage: QAChecks
+  jobs:
+  - job: Test
+    steps: 
+    - task: Bash@3
+      displayName: 'install dependencies'
+      inputs:
+       targetType: inline
+       script: |
+         set -eux # fail on error
+         npm install
+- stage: BuildAndPush
+  dependsOn: QAChecks
